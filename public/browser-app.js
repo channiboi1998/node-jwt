@@ -50,7 +50,7 @@ btnDOM.addEventListener('click', async () => {
         'Authorization': `Bearer ${token}`,
       },
     })
-    resultDOM.innerHTML = `<h5>${data.msg}</h5><p>${data.secret}</p>`
+    resultDOM.innerHTML = `<h5>${data.msg}</h5><p>${data.string}</p>`
 
     data.secret
   } catch (error) {

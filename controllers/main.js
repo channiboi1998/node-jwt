@@ -1,44 +1,32 @@
-const jwt = require('jsonwebtoken');
+const JWT = require('jsonwebtoken');
+const { BadRequest } = require('../errors');
+const { StatusCodes } = require('http-status-codes');
 
 const login = (request, response) => {
+
+    //Fetching the inserted `username` and `password`
     const { username, password } = request.body;
     
     if (!username || !password) {
-        return response.status(500).send('Username or Password is required!');
+        //Either `username` or `password` or both is empty
+        throw new BadRequest('Username or Password is required bro!');
     }
 
     let data = {
-        msg: 'Hello bhie',
-        token: jwt.sign({ username: username }, process.env.SECRET_KEY)
+        msg: 'Successfully Logged In!',
+        token: JWT.sign({ username: username }, process.env.SECRET_KEY)
     };
 
-    response.json(data);
+    response.status(StatusCodes.CREATED).json(data);
 }
 
 const dashboard = async (request, response) => {
-
+    
     let data = {};
-
-    const headerAuth = request.headers.authorization;
-
-    if (!headerAuth || !headerAuth.startsWith('Bearer ')) {
-        data.msg = 'Authentication Failed';
-        response.status(500).json(data);
-    }
-
-    const token = headerAuth.split(' ')[1];
-
-    data.secret = token;
-    try {
-        jwt.verify(token, process.env.SECRET_KEY);
-    } catch(error) {
-        data.msg = 'Token expired';
-        response.status(500).json(data);
-    }
-
-    data.msg = 'Token Verfied, hello Chrishern';
-
-    response.json(data);
+    data.msg = `Success Authentication ${request.user.username}`;
+    data.string = 'Hello Christian';
+    response.status(StatusCodes.OK).json(data);
+    
 }
 
 module.exports = {
